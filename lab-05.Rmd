@@ -127,8 +127,10 @@ In Alaska, 2/3 Denny's locations are about 5 km away from a La Quinta, and 1 Den
 ```{r visualizing-alaska-dennys}
 
 ak_dennys <- ggplot(dn_lq_ak_mindist, aes(x= address.x, y = closest)) +
-  geom_col() +
-  labs(x = "Denny's locations in Alaska", y = "distance (in km) to closest La Quinta", title = "Distance between Denny's and La Quinta locations in Alaska")
+  geom_col(fill = '#deebf7') +
+  labs(x = "Denny's locations in Alaska", y = "distance (in km) to closest La Quinta", title = "Distance between Denny's and La Quinta locations in Alaska") + 
+  theme_minimal() +
+    theme(axis.text.x=element_blank())
 
 ak_dennys
 
@@ -141,14 +143,113 @@ Repeating the same analysis for North Carolina:
 
 ```{r nc-dennys}
 
-dn_ak <- dn %>%
-  filter(state == "AK")
+dn_nc <- dn %>%
+  filter(state == "NC")
 
-lq_ak <- lq %>%
-  filter(state == "AK")
+lq_nc <- lq %>%
+  filter(state == "NC")
 
+dn_lq_nc <- full_join(dn_nc, lq_nc, by = "state")
 
+dn_lq_nc <- dn_lq_nc %>%
+  mutate(distance = haversine(longitude.x, latitude.x, longitude.y, latitude.y, round = 3))
+
+dn_lq_nc_mindist <- dn_lq_nc %>%
+  group_by(address.x) %>%
+  summarize(closest = min(distance)) %>%
+  arrange(closest) %>%
+  mutate(address.x = fct_inorder(address.x))
+
+summary(dn_lq_nc_mindist)
+
+nc_dennys <- ggplot(dn_lq_nc_mindist, aes(x= address.x, y = closest)) +
+  geom_col(fill = '#718C00') +
+  labs(x = "Denny's locations in North Carolina", y = "distance (in km) to closest La Quinta", title = "Distance between Denny's and La Quinta locations in North Carolina") +
+  theme_minimal() +
+    theme(axis.text.x=element_blank())
+
+nc_dennys
 
 
 ```
 
+
+
+### Exercise 10
+
+Repeating the same analysis for Texas:
+```{r tx-dennys}
+
+dn_tx <- dn %>%
+  filter(state == "TX")
+
+lq_tx <- lq %>%
+  filter(state == "TX")
+
+dn_lq_tx <- full_join(dn_tx, lq_tx, by = "state")
+
+dn_lq_tx <- dn_lq_tx %>%
+  mutate(distatxe = haversine(longitude.x, latitude.x, longitude.y, latitude.y, round = 3))
+
+dn_lq_tx_mindist <- dn_lq_tx %>%
+  group_by(address.x) %>%
+  summarize(closest = min(distatxe)) %>%
+  arrange(closest) %>%
+  mutate(address.x = fct_inorder(address.x))
+
+summary(dn_lq_tx_mindist)
+
+tx_dennys <- ggplot(dn_lq_tx_mindist, aes(x= address.x, y = closest)) +
+  geom_col(fill = '#BF5700') +
+  labs(x = "Denny's locations in Texas", y = "distance (in km) to closest La Quinta", title = "Distance between Denny's and La Quinta locations in Texas") +
+  theme_minimal() +
+  theme(axis.text.x=element_blank())
+
+tx_dennys
+
+
+```
+
+
+
+
+### Exercise 11
+
+Repeating the same analysis for Georgia (where I was born):
+
+```{r ga-dennys}
+
+dn_ga <- dn %>%
+  filter(state == "GA")
+
+lq_ga <- lq %>%
+  filter(state == "GA")
+
+dn_lq_ga <- full_join(dn_ga, lq_ga, by = "state")
+
+dn_lq_ga <- dn_lq_ga %>%
+  mutate(distagae = haversine(longitude.x, latitude.x, longitude.y, latitude.y, round = 3))
+
+dn_lq_ga_mindist <- dn_lq_ga %>%
+  group_by(address.x) %>%
+  summarize(closest = min(distagae)) %>%
+  arrange(closest) %>%
+  mutate(address.x = fct_inorder(address.x))
+
+summary(dn_lq_ga_mindist)
+
+ga_dennys <- ggplot(dn_lq_ga_mindist, aes(x= address.x, y = closest)) +
+  geom_col(fill = '#FEE0D2') +
+  labs(x = "Denny's locations in Georgia", y = "distance (in km) to closest La Quinta", title = "Distance between Denny's and La Quinta locations in Georgia") +
+  theme_minimal() +
+  theme(axis.text.x=element_blank())
+
+ga_dennys
+
+
+```
+
+
+### Exercise 12
+
+Of the states I examined, I think the joke holds true most in Texas! (Because it's such a negatively skewed distribution.) Though the distribution in Georgia does look quite similar (there just aren't nearly as many Denny's locations all in all).
