@@ -1,36 +1,56 @@
 ---
-title: "Lab 04 - La Quinta is Spanish for next to Denny's, Pt. 2"
-author: "Insert your name here"
-date: "Insert date here"
+title: "Lab 05 - La Quinta is Spanish for next to Denny's, Pt. 2"
+author: "Rowan Kemmerly"
+date: "3.4.23"
 output: github_document
 ---
 
 ### Load packages and data
 
 ```{r load-packages, message = FALSE}
+# install.packages("devtools")
+devtools::install_github("rstudio-education/dsbox")
+
+
 library(tidyverse) 
 library(dsbox) 
 ```
 
 ```{r load-data, message = FALSE}
 states <- read_csv("data/states.csv")
+
+dn <- dennys
+lq <- laquinta
 ```
 
 ### Exercise 1
 
-Remove this text, and add your answer for Exercise 1 here.
-Add code chunks as needed.
-Don't forget to label your code chunk.
-Do not use spaces in code chunk labels.
+```{r dn-alaska}
+
+dn_ak <- dn %>%
+  filter(state == "AK")
+
+nrow(dn_ak)
+
+```
+
+There are three Denny's locations in Alaska. 
 
 ### Exercise 2
 
-Remove this text, and add your answer for Exercise 1 here.
-Add code chunks as needed.
-Don't forget to label your code chunk.
-Do not use spaces in code chunk labels.
+```{r lq-alaska}
+
+lq_ak <- lq %>%
+  filter(state == "AK")
+nrow(lq_ak)
+
+```
+
+There are two La Quinta locations in Alaska.
 
 ### Exercise 3
+
+There are six possible pairings of Denny's locations and La Quinta locations in Alaska (3 Denny's x 2 La Quintas = 6 pairings). 
 
 ...
 
